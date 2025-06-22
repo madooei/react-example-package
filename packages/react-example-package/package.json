@@ -1,6 +1,6 @@
 {
   "name": "@madooei/react-example-package",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A React TypeScript package template with minimal setup.",
   "type": "module",
   "sideEffects": false,
