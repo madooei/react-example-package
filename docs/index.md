@@ -1,13 +1,20 @@
 # React Example Package
 
-A minimal React TypeScript package template. It is designed to demonstrate how to structure, build, test, and publish a React component library in a portable and easy-to-understand way.
+A minimal React TypeScript package template for creating reusable React components that can be used both locally and published to NPM.
 
-Currently, this package exports Button and Card React components with TypeScript support and tree-shaking optimization.
+**Features:**
+
+- Written in TypeScript
+- Builds to both modern ES modules and CommonJS formats
+- Provides TypeScript type definitions
+- ESLint for code linting
+- Prettier for code formatting
+- Vitest for testing
+- Tsup for building
+- React component optimization with tree-shaking
+- Tailwind CSS integration
 
 ## Installation
-
-> [!TIP]
-> For local installation (using a local copy of this package instead of the one published to NPM), see the [Local Installation section](#local-installation).
 
 ```bash
 npm install @madooei/react-example-package
@@ -18,8 +25,6 @@ npm install @madooei/react-example-package
 ```bash
 npm install react react-dom tailwindcss
 ```
-
-**Note**: The package includes runtime checks that will throw helpful error messages if peer dependencies are missing or incompatible.
 
 ## Usage
 
@@ -52,10 +57,6 @@ import React from "react";
 import { Button } from "@madooei/react-example-package/button";
 import { Card } from "@madooei/react-example-package/card";
 
-// Or default imports:
-// import Button from '@madooei/react-example-package/button';
-// import Card from '@madooei/react-example-package/card';
-
 function App() {
   return (
     <div>
@@ -67,8 +68,6 @@ function App() {
   );
 }
 ```
-
-**Recommendation**: Use individual imports in production applications with many components for optimal bundle size.
 
 ### Components
 
@@ -98,127 +97,111 @@ A container component with optional title and custom styling.
 
 This package **requires Tailwind CSS** for styling. Components use Tailwind utility classes and will not display correctly without Tailwind CSS properly configured in your project.
 
-**Setup Tailwind CSS:**
+Configure your `tailwind.config.js` to include the component library:
 
-1. Install Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
-2. Initialize Tailwind: `npx tailwindcss init -p`
-3. **Important**: Configure your `tailwind.config.js` to include the component library:
-   ```js
-   /** @type {import('tailwindcss').Config} */
-   export default {
-     content: [
-       "./index.html",
-       "./src/**/*.{js,ts,jsx,tsx}",
-       // Add this line to scan the component library:
-       "./node_modules/@madooei/react-example-package/dist/**/*.{js,cjs}",
-     ],
-     theme: {
-       extend: {},
-     },
-     plugins: [],
-   };
-   ```
-4. Add Tailwind directives to your CSS file:
-   ```css
-   @tailwind base;
-   @tailwind components;
-   @tailwind utilities;
-   ```
-
-**Without step 3**, Tailwind won't include the component library's classes and components will appear unstyled.
-
-### TailwindCSS V4
-
-Follow tailwind's instruction to set it up. You should still create the `tailwind.config.js` as shown above. Then, add it to your primary CSS file:
-
-```css
-@import "tailwindcss";
-@config "tailwind.config.js";
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    // Add this line to scan the component library:
+    "./node_modules/@madooei/react-example-package/dist/**/*.{js,cjs}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
 ```
 
-## Local Installation
+## Cloning the Repository
 
-This template is particularly useful for creating packages that are intended to be used locally so read the instructions below for local development.
+To make your workflow more organized, it's a good idea to clone this repository into a directory named `react-package-workspace`. This helps differentiate the workspace from the `react-example-package` located in the `packages` directory.
 
-### Local Development (Without Publishing to NPM)
+```bash
+git clone https://github.com/madooei/react-example-package react-package-workspace
 
-There are three ways to use this package locally:
+cd react-package-workspace
+```
 
-#### Option 1: Using npm link
+## Repository Structure
 
-1. Clone this repository, install dependencies, build the package, and create a global symlink:
+- `packages` — Contains the primary package(s) for this repository (e.g., `react-example-package`). Each package is self-contained and can be copied out and used independently.
+- `examples` — Contains examples of how to use the packages. Each example is a minimal, standalone project.
+- `playgrounds` — Contains demos of the dependencies of the primary package(s). Each playground is a minimal, standalone project.
+- `docs` — Contains various documentation for users and developers.
+- `.github` — Contains GitHub-specific files, such as workflows and issue templates.
 
-   ```bash
-   git clone <repository-url> react-package-workspace
-   cd react-package-workspace/packages/react-example-package
-   # Install dependencies and build the package
-   npm install
-   npm run build
-   # Create a global symlink
-   npm link
-   ```
+## How to Use This Repo
 
-   Note: You can unlink the package later using `npm unlink`.
+- To work on a package, go to `packages/<package-name>` and follow its README.
+- To try an example, go to `examples/<example-name>` and follow its README.
+- To run the playground, go to `playground/<package-name>` and follow its README.
+- For documentation, see the `docs` folder.
 
-2. In your other project where you want to use this package:
+### Using a VSCode Multi-root Workspace
 
-   ```bash
-   npm link @madooei/react-example-package
-   ```
+With Visual Studio Code, you can enhance your development experience by using a multi-root workspace to access packages, examples, and playgrounds simultaneously. This approach is more efficient than opening the root directory, or each package or example separately.
 
-3. Import the package in your project:
+To set up a multi-root workspace:
 
-   ```typescript
-   import { Button, Card } from "@madooei/react-example-package";
-   ```
+1. Open Visual Studio Code.
+2. Navigate to `File > Open Workspace from File...`.
+3. Select the `react-example-package.code-workspace` file located at the root of the repository. This action will open all specified folders in one workspace.
 
-#### Option 2: Using local path
-
-In your other project's `package.json`, add this package as a dependency using the local path:
+The `react-example-package.code-workspace` file can be customized to include different folders or settings. Here's a typical configuration:
 
 ```json
 {
-  "dependencies": {
-    "@madooei/react-example-package": "file:/path/to/react-example-package"
+  "folders": [
+    {
+      "path": "packages/react-example-package"
+    },
+    {
+      "path": "examples/with-tailwind3"
+    },
+    {
+      "path": "playgrounds/vite"
+    }
+  ],
+  "settings": {
+    // Add any workspace-specific settings here, for example:
+    "git.openRepositoryInParentFolders": "always"
   }
 }
 ```
 
-You can use absolute or relative paths with the `file:` protocol.
+## Developing the Package
 
-Then run `npm install` in your project.
+Change to the package directory and install dependencies:
 
-Now you can import the package in your project as usual.
-
-#### Option 3: Using a local tarball (npm pack)
-
-1. Follow option 1 but instead of using `npm link`, create a tarball of the package:
-
-   ```bash
-   npm pack
-   ```
-
-   This will generate a file like `madooei-react-example-package-1.0.0.tgz`. (Or whatever version you have.)
-   You can find the tarball in the same directory as your `package.json`.
-
-2. In your other project, install the tarball:
-
-   ```bash
-   npm install /absolute/path/to/react-example-package/madooei-react-example-package-1.0.0.tgz
-   ```
-
-   Or, if you copy the tarball into your project directory:
-
-   ```bash
-   npm install ./madooei-react-example-package-1.0.0.tgz
-   ```
-
-This method installs the package exactly as it would be published to npm, making it ideal for final testing. After this installation, you must have the package in your `node_modules` directory, and you can import it as usual. You will also see the package in your `package.json` file as a dependency:
-
-```json
-{
-  "dependencies": {
-    "@madooei/react-example-package": "file:madooei-react-example-package-1.0.0.tgz"
-  }
-}
+```bash
+cd packages/react-example-package
+npm install
 ```
+
+- Read the [Project Roadmap](../../docs/ROADMAP.md) for project goals, status, evolution, and development guidelines.
+- Read the [Development Guide](DEVELOPMENT.md) for detailed information on the package architecture, build configuration, and implementation patterns.
+- Follow the [Contributing Guide](../../docs/CONTRIBUTING.md) for contribution guidelines, coding standards, and best practices.
+
+## Package Management
+
+When you are ready to publish your package:
+
+```bash
+npm run release
+```
+
+This single command will:
+
+- Validate your code with the full validation pipeline
+- Analyze commits to determine version bump
+- Update package.json version and changelog
+- Build the package
+- Create and push git tag
+- Create GitHub release
+- Publish to NPM
+
+> [!TIP]
+> For detailed information about package publishing, versioning, and local development workflows, see the [NPM Package Management Guide](../../docs/guides/npm-package.md).
